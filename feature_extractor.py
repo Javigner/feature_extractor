@@ -1,7 +1,20 @@
 import sys
 
-#def dispersion(data, days):
-    
+def dispersion(data, days):
+    result = 0
+    tmp = 0
+    if len(data) < days:
+        print('List length must be at least equal to days')
+        return
+    for i in range(len(data)):
+        if (i > len(data) - days):
+            break 
+        for j in range(days - 1):
+            tmp += abs(data[i + 1 + j] - data[i + j])
+        if tmp > result:
+            result = tmp
+        tmp = 0
+    print("Highest dispersion for {} days: {}".format(days, result))
 
 def compare_peak(peak, peak_tmp):
     if len(peak) > len(peak_tmp):
@@ -40,17 +53,18 @@ def longest_peak(data, valley):
         if peak_tmp[len(peak_tmp) - 1] == max(peak_tmp) or peak_tmp[0] == max(peak_tmp):
             print("The list does not contain peak")
             return
-        print("Longest valley:", peak_tmp, "Duration:", len(peak_tmp), "Amplitude:", max(peak_tmp) - min(peak_tmp))   
+        print("Longest valley: {}, duration: {}, amplitude: {}".format(peak_tmp, len(peak_tmp), max(peak_tmp) - min(peak_tmp)))  
     else:
-        print("Longest Peak:", peak_tmp, "Duration:", len(peak_tmp), "Amplitude:", max(peak_tmp) - min(peak_tmp))           
+        print("Longest peak: {}, duration: {}, amplitude: {}".format(peak_tmp, len(peak_tmp), max(peak_tmp) - min(peak_tmp)))           
             
-def main():
-    test = [62, 65, 63, 72, 71, 60, 61, 65, 70, 73, 68, 70, 73, 71, 67, 66, 65]
-    test2 = [65, 62, 62, 61]
-    test3 = [65, 64, 64, 64, 69]
-    test4 = [63, 62, 68]
-    longest_peak(test, 0)
-    longest_peak(test, 1)
-
-if __name__ == "__main__":
-    main();
+def feature_extractor(data):
+    if isinstance(data, list) == False:
+        sys.exit('data must be a list of integer')
+    for number in data:
+        if isinstance(number, int) == False:
+            sys.exit('Your list must contain only integer')
+    longest_peak(data, 0)
+    longest_peak(data, 1)
+    dispersion(data, 3)
+    dispersion(data, 5)
+    dispersion(data, 11)
